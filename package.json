@@ -1,0 +1,22 @@
+{
+  "name": "danflix-onprem",
+  "version": "1.0.0",
+  "description": "On-prem component of DanFlix",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danwiltshire/danflix-onprem.git"
+  },
+  "author": "Daniel Wiltshire",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/danwiltshire/danflix-onprem/issues"
+  },
+  "homepage": "https://github.com/danwiltshire/danflix-onprem#readme",
+  "dependencies": {
+    "fluent-ffmpeg": "2.1.2"
+  }
+}
