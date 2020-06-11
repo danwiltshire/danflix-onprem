@@ -32,7 +32,7 @@ app.post('/job/transcode', function(req, res) {
   console.log('Received POST for /job/transcode');
   console.log('parameter: ' + req.query.mediaId);
   const jobId = getRandomInt(1024); // Generate random number for the jobId (can be improved)
-  TranscodeJob(jobId, "tests/video/sample_video/1.mkv", "tests/video/output_video/test.mp4"); // Run the transcode
+  TranscodeJob(jobId, "tests/video/sample_video/1.mov", "tests/video/output_video/1.mp4"); // Run the transcode
   res.end(JSON.stringify({ jobId: jobId })); // Return jobId as JSON
 });
 
