@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/danwiltshire/danflix-onprem#readme",
   "dependencies": {
-    "fluent-ffmpeg": "2.1.2"
+    "express": "^4.17.1",
+    "fluent-ffmpeg": "^2.1.2"
   }
 }
