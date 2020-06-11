@@ -1,0 +1,18 @@
+body {
+    background-color: #333333;
+    font-family: 'Roboto', sans-serif;
+    color: white;
+}
+
+#container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#container video {
+    width: 80%;
+    background: #000000;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px #111111;
+}
