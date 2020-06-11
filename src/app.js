@@ -14,14 +14,22 @@ function TranscodeJob(inputPath, outputPath) {
   })
 }
 
-app.get('/media/:id', function(req, res) {
-  console.log('Received GET for /media/:id');
+// Get media url for specified :mediaId
+app.get('/media/:mediaId/url', function(req, res) {
+  console.log('Received GET for /media/:id/url');
   res.sendStatus(404);
 });
 
-app.post('/job/transcode/:id', function(req, res) {
-  console.log('Received POST for /job/transcode/:id');
+// Post a transcode job for specified :mediaId
+app.post('/job/transcode/:mediaId', function(req, res) {
+  console.log('Received POST for /job/transcode/:mediaID');
   TranscodeJob("tests/video/sample_video/1.mkv", "tests/video/output_video/test.mp4")
+  res.sendStatus(200);
+});
+
+// Get status of a transcode job
+app.get('/job/transcode/:jobId', function(req, res) {
+  console.log('Received GET for /job/transcode/:jobId');
   res.sendStatus(200);
 });
 
