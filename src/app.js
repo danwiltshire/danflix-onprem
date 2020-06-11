@@ -8,6 +8,7 @@ function TranscodeJob(inputPath, outputPath) {
       .input(inputPath)
       .noAudio()
       .output(outputPath)
+      .on('progress', function(progress) { console.log(progress.percent) } )
       .on('end', resolve)
       .on('error', reject)
       .run();
