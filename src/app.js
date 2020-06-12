@@ -4,20 +4,34 @@ var ffmpeg = require('fluent-ffmpeg');
 
 class Job {
 
+  /**
+   * Returns a random number for use as a Job ID
+   */
   create() {
     console.log("Job create()");
-    let id = 1;
-    return(id);
+    return(Math.floor(Math.random() * Math.floor(2048)));
   }
 
+  /**
+   * Starts the ffmpeg process
+   * @param {Number} id - The Job ID
+   */
   start(id) {
     console.log("Job start()");
   }
 
+  /**
+   * Gets the Job progress
+   * @param {Number} id - The Job ID
+   */
   get(id) {
     console.log("Job get()");
   }
 
+  /**
+   * Cancels the Job
+   * @param {Number} id - The Job ID 
+   */
   cancel(id) {
     console.log("Job cancel()");
   }
