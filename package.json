@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/danwiltshire/danflix-onprem#readme",
   "dependencies": {
-    "express": "^4.17.1",
-    "fluent-ffmpeg": "^2.1.2"
+    "express": "4.17.1",
+    "fluent-ffmpeg": "2.1.2"
   },
   "devDependencies": {
     "mocha": "8.0.1"
