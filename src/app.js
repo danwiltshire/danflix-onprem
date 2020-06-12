@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 var ffmpeg = require('fluent-ffmpeg');
 
-function TranscodeJob(jobId, inputPath, outputPath) {
+function startJob(jobId, inputPath, outputPath) {
   console.log("Running transcode job " + jobId)
   return new Promise(async (resolve, reject) => {
     return ffmpeg()
@@ -30,7 +30,7 @@ app.post('/job/transcode', function(req, res) {
   console.log('Received POST for /job/transcode');
   console.log('parameter: ' + req.query.mediaId);
   const jobId = getRandomInt(1024); // Generate random number for the jobId (can be improved)
-  TranscodeJob(jobId, "tests/video/sample_video/4K.mp4", "tests/video/output_video/1.mp4"); // Run the transcode
+  startJob(jobId, "tests/video/sample_video/4K.mp4", "tests/video/output_video/1.mp4"); // Run the transcode
   res.end(JSON.stringify({ jobId: jobId })); // Return jobId as JSON
 });
 
