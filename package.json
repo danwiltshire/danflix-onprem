@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "jsdoc": "node_modules/jsdoc/jsdoc.js src -d docs"
+    "jsdoc": "node_modules/jsdoc/jsdoc.js src -d docs -R README.md"
   },
   "repository": {
     "type": "git",
