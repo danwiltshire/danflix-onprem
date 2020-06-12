@@ -32,15 +32,15 @@ app.post('/job/transcode', function(req, res) {
   console.log('Received POST for /job/transcode');
   console.log('parameter: ' + req.query.mediaId);
   const jobId = getRandomInt(1024); // Generate random number for the jobId (can be improved)
-  TranscodeJob(jobId, "tests/video/sample_video/1.mov", "tests/video/output_video/1.mp4"); // Run the transcode
+  TranscodeJob(jobId, "tests/video/sample_video/4K.mp4", "tests/video/output_video/1.mp4"); // Run the transcode
   res.end(JSON.stringify({ jobId: jobId })); // Return jobId as JSON
 });
 
 // Get status of a transcode job
 app.get('/job/transcode', function(req, res) {
   console.log('Received GET for /job/transcode');
-  console.log('parameter: ' + req.query.jobId);
-  res.end(JSON.stringify({ progress: jobs.get(req.query.jobId) })); // Return progress as JSON
+  console.log('parameter: ' + parseInt(req.query.jobId));
+  res.end(JSON.stringify({ progress: jobs.get(parseInt(req.query.jobId)) })); // Return progress as JSON
 });
 
 app.listen(8080, function() {
