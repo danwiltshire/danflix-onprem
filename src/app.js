@@ -2,6 +2,37 @@ const express = require('express');
 const app = express();
 var ffmpeg = require('fluent-ffmpeg');
 
+class Job {
+
+  create() {
+    console.log("Job create()");
+    let id = 1;
+    return(id);
+  }
+
+  start(id) {
+    console.log("Job start()");
+  }
+
+  get(id) {
+    console.log("Job get()");
+  }
+
+  cancel(id) {
+    console.log("Job cancel()");
+  }
+  
+}
+
+const job = new Job();
+
+console.log(job.create());
+job.start();
+job.get();
+job.cancel();
+
+//function createJob() {}
+
 function startJob(jobId, inputPath, outputPath) {
   console.log("Running transcode job " + jobId)
   return new Promise(async (resolve, reject) => {
@@ -16,6 +47,10 @@ function startJob(jobId, inputPath, outputPath) {
       .run();
   })
 }
+
+function cancelJob(Job) {}
+
+function getJob(Job) {}
 
 // Returns a random integer
 function getRandomInt(max) {
