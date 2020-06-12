@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 var ffmpeg = require('fluent-ffmpeg');
 
+/**
+ * A Job class for managing transcode processes
+ */
 class Job {
 
   /**
