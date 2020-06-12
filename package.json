@@ -4,7 +4,8 @@
   "description": "On-prem component of DanFlix",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "jsdoc": "node_modules/jsdoc/jsdoc.js src -d docs"
   },
   "repository": {
     "type": "git",
