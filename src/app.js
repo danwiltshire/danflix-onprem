@@ -9,9 +9,7 @@ function TranscodeJob(jobId, inputPath, outputPath) {
       .input(inputPath)
       .noAudio()
       .output(outputPath)
-      .on('progress', function(progress) {
-          jobs.set(jobId,progress.percent);
-        })
+      .on('progress', function(progress) { jobs.set(jobId,progress.percent) })
         // todo.. delete dict entry when job errors/completes
       .on('end', resolve)
       .on('error', reject)
