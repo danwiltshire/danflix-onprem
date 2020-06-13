@@ -58,7 +58,7 @@ app.post('/job/run', function(req, res) {
 
     // Create output directory for ffmpeg
     if (!fs.existsSync(outputDir)){
-        fs.mkdirSync(outputDir, { recursive: true });
+      fs.mkdirSync(outputDir, { recursive: true });
     }
 
     run(jobId, input, output);
