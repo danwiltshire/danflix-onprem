@@ -52,7 +52,9 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-// Post a transcode job for specified :mediaId
+/**
+ * Spawn a transcode job for the specified :mediaId
+ */
 app.post('/job/run', function(req, res) {
 
   if ( media.has( parseInt(req.body.mediaId )) ) {
@@ -65,7 +67,9 @@ app.post('/job/run', function(req, res) {
 
 });
 
-// Get status of a transcode job
+/**
+ * Get status of a transcode job for the specified :jobId
+ */
 app.get('/job/progress', function(req, res) {
 
   if ( jobs.has(parseInt(req.query.jobId)) ) {
