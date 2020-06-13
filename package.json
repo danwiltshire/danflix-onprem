@@ -20,7 +20,8 @@
   "homepage": "https://github.com/danwiltshire/danflix-onprem#readme",
   "dependencies": {
     "express": "4.17.1",
-    "fluent-ffmpeg": "2.1.2"
+    "fluent-ffmpeg": "2.1.2",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",

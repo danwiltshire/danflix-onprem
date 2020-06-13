@@ -1,6 +1,12 @@
 const express = require('express');
 const app = express();
+var morgan = require('morgan')
 var ffmpeg = require('fluent-ffmpeg');
+
+/**
+ * Use apache 'combined' format logging
+ */
+app.use(morgan('combined'))
 
 function run(jobId, inputPath, outputPath) {
 
@@ -31,8 +37,6 @@ let jobs = new Map();
 // Post a transcode job for specified :mediaId
 app.post('/job/run', function(req, res) {
 
-  console.log(req.method + " " + req.protocol + '://' + req.get('host') + req.originalUrl);
-
   const jobId = getRandomInt(1024);
   run(jobId, "test/video/sample_video/4K.mp4", "test/video/output_video/1.mp4");
   res.end(JSON.stringify({ jobId: jobId }));
@@ -41,8 +45,6 @@ app.post('/job/run', function(req, res) {
 
 // Get status of a transcode job
 app.get('/job/progress', function(req, res) {
-
-  console.log(req.method + " " + req.protocol + '://' + req.get('host') + req.originalUrl);
 
   if ( jobs.has(parseInt(req.query.jobId)) ) {
     res.end(JSON.stringify({ progress: jobs.get(parseInt(req.query.jobId)) })); // Return progress as JSON
