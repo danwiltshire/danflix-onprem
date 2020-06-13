@@ -41,7 +41,6 @@ function run(jobId, input, output) {
       .on('error', reject)
       .run();
   })
-
 }
 
 // Spawn a transcode job for the specified :mediaId
@@ -51,7 +50,6 @@ app.post('/job/run', function(req, res) {
   const mediaId = parseInt( req.body.mediaId );
 
   if ( media.has( mediaId ) ) {
-
     const mediaItem = media.get( mediaId );
     const jobId = getRandomInt(1024);
     const input = mediaItem.path;
@@ -68,7 +66,6 @@ app.post('/job/run', function(req, res) {
   } else {
     res.status(404).end();
   }
-
 });
 
 // Get status of a transcode job for the specified :jobId
@@ -82,7 +79,6 @@ app.get('/job/progress', function(req, res) {
   } else {
     res.status(404).end();
   }
-  
 });
 
 // Start the HTTP server
