@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 var ffmpeg = require('fluent-ffmpeg');
 
-function startJob(jobId, inputPath, outputPath) {
+function run(jobId, inputPath, outputPath) {
   console.log("Running transcode job " + jobId)
   return new Promise(async (resolve, reject) => {
     return ffmpeg()
@@ -30,7 +30,7 @@ app.post('/job/run', function(req, res) {
   console.log('Received POST for /job/transcode');
   console.log('parameter: ' + req.query.mediaId);
   const jobId = getRandomInt(1024); // Generate random number for the jobId (can be improved)
-  startJob(jobId, "test/video/sample_video/4K.mp4", "test/video/output_video/1.mp4"); // Run the transcode
+  run(jobId, "test/video/sample_video/4K.mp4", "test/video/output_video/1.mp4"); // Run the transcode
   res.end(JSON.stringify({ jobId: jobId })); // Return jobId as JSON
 });
 
@@ -38,9 +38,14 @@ app.post('/job/run', function(req, res) {
 app.get('/job/progress', function(req, res) {
   console.log('Received GET for /job/transcode');
   console.log('parameter: ' + parseInt(req.query.jobId));
-  res.end(JSON.stringify({ progress: jobs.get(parseInt(req.query.jobId)) })); // Return progress as JSON
+  if ( jobs.has(parseInt(req.query.jobId)) ) {
+    res.end(JSON.stringify({ progress: jobs.get(parseInt(req.query.jobId)) })); // Return progress as JSON
+  } else {
+    res.status(404).end();
+  }
+  
 });
 
 app.listen(8080, function() {
-  console.log('Example app listening on port 8080!');
+  console.log('Transcode app listening on port 8080!');
 });
