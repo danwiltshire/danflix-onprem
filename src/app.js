@@ -1,16 +1,37 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
 var morgan = require('morgan')
 var ffmpeg = require('fluent-ffmpeg');
 
 /**
+ * Body parsing for handling HTTP POST data
+ */
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.raw());
+
+/**
  * Use apache 'combined' format logging
  */
-app.use(morgan('combined'))
+app.use(morgan('combined'));
+
+/**
+ * Media index
+ */
+let media = new Map([
+  {
+    1: { "path": "test/video/sample_video/4K.mp4", "title": "A 4K Cityscape" }
+  }
+]);
+
+
+/**
+ * The jobId and job progress
+ */
+let jobs = new Map();
 
 function run(jobId, inputPath, outputPath) {
-
-  console.log("Running transcode job ID " + jobId)
 
   return new Promise(async (resolve, reject) => {
     return ffmpeg()
@@ -31,15 +52,16 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-// Temporary jobId and progress info
-let jobs = new Map();
-
 // Post a transcode job for specified :mediaId
 app.post('/job/run', function(req, res) {
 
-  const jobId = getRandomInt(1024);
-  run(jobId, "test/video/sample_video/4K.mp4", "test/video/output_video/1.mp4");
-  res.end(JSON.stringify({ jobId: jobId }));
+  if ( media.has( parseInt(req.body.mediaId )) ) {
+    const jobId = getRandomInt(1024);
+    run(jobId, "test/video/sample_video/4K.mp4", "test/video/output_video/1.mp4");
+    res.end( JSON.stringify({ jobId: jobId }) );
+  } else {
+    res.status(404).end();
+  }
 
 });
 
