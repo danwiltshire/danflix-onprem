@@ -3,7 +3,9 @@ const app = express();
 var ffmpeg = require('fluent-ffmpeg');
 
 function run(jobId, inputPath, outputPath) {
-  console.log("Running transcode job " + jobId)
+
+  console.log("Running transcode job ID " + jobId)
+
   return new Promise(async (resolve, reject) => {
     return ffmpeg()
       .input(inputPath)
@@ -15,6 +17,7 @@ function run(jobId, inputPath, outputPath) {
       .on('error', reject)
       .run();
   })
+
 }
 
 // Returns a random integer
@@ -27,19 +30,20 @@ let jobs = new Map();
 
 // Post a transcode job for specified :mediaId
 app.post('/job/run', function(req, res) {
-  console.log('Received POST for /job/transcode');
-  console.log('parameter: ' + req.query.mediaId);
-  const jobId = getRandomInt(1024); // Generate random number for the jobId (can be improved)
-  run(jobId, "test/video/sample_video/4K.mp4", "test/video/output_video/1.mp4"); // Run the transcode
-  res.end(JSON.stringify({ jobId: jobId })); // Return jobId as JSON
+
+  console.log(req.method + " " + req.protocol + '://' + req.get('host') + req.originalUrl);
+
+  const jobId = getRandomInt(1024);
+  run(jobId, "test/video/sample_video/4K.mp4", "test/video/output_video/1.mp4");
+  res.end(JSON.stringify({ jobId: jobId }));
+
 });
 
 // Get status of a transcode job
 app.get('/job/progress', function(req, res) {
-  console.log('Received GET for /job/transcode');
-  console.log('parameter: ' + parseInt(req.query.jobId));
 
-  // 
+  console.log(req.method + " " + req.protocol + '://' + req.get('host') + req.originalUrl);
+
   if ( jobs.has(parseInt(req.query.jobId)) ) {
     res.end(JSON.stringify({ progress: jobs.get(parseInt(req.query.jobId)) })); // Return progress as JSON
   } else {
