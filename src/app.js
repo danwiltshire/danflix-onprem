@@ -74,6 +74,7 @@ app.get('/job/progress', function(req, res) {
   // HTTP query parameters are strings by default - cast to int
   const jobId = parseInt( req.query.jobId );
 
+  // Return the progress in JSON (progress:X)
   if ( jobs.has( jobId ) ) {
     res.end(JSON.stringify({ progress: jobs.get( jobId ) }));
   } else {
