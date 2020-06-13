@@ -38,6 +38,8 @@ app.post('/job/run', function(req, res) {
 app.get('/job/progress', function(req, res) {
   console.log('Received GET for /job/transcode');
   console.log('parameter: ' + parseInt(req.query.jobId));
+
+  // 
   if ( jobs.has(parseInt(req.query.jobId)) ) {
     res.end(JSON.stringify({ progress: jobs.get(parseInt(req.query.jobId)) })); // Return progress as JSON
   } else {
