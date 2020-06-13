@@ -1,15 +1,12 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
 var morgan = require('morgan')
 var ffmpeg = require('fluent-ffmpeg');
 
 /**
  * Body parsing for handling HTTP POST data
  */
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(bodyParser.raw());
+app.use(express.json());
 
 /**
  * Use apache 'combined' format logging
@@ -19,12 +16,15 @@ app.use(morgan('combined'));
 /**
  * Media index
  */
-let media = new Map([
-  {
-    1: { "path": "test/video/sample_video/4K.mp4", "title": "A 4K Cityscape" }
-  }
-]);
+let media = new Map();
 
+media.set(1, { "path": "test/video/sample_video/4K.mp4", title: "A 4K Cityscape" });
+
+if ( media.has( 1 ) ) {
+  console.log("yes");
+} else {
+  console.log("no");
+}
 
 /**
  * The jobId and job progress
@@ -57,13 +57,23 @@ function getRandomInt(max) {
  */
 app.post('/job/run', function(req, res) {
 
-  if ( media.has( parseInt(req.body.mediaId )) ) {
-    const jobId = getRandomInt(1024);
-    run(jobId, "test/video/sample_video/4K.mp4", "test/video/output_video/1.mp4");
-    res.end( JSON.stringify({ jobId: jobId }) );
+  if ( Number.isInteger(req.body.mediaId) ) {
+
+    if ( media.has( req.body.mediaId ) ) {
+
+      const jobId = getRandomInt(1024);
+      run(jobId, "test/video/sample_video/4K.mp4", "test/video/output_video/1.mp4");
+      res.end( JSON.stringify({ jobId: jobId }) );
+
+    } else {
+      res.status(404).end();
+    }
+
   } else {
-    res.status(404).end();
+    res.status(400).end();
   }
+
+
 
 });
 
