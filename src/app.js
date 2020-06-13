@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
-var morgan = require('morgan')
-var ffmpeg = require('fluent-ffmpeg');
-var fs = require('fs');
+const morgan = require('morgan')
+const ffmpeg = require('fluent-ffmpeg');
+const fs = require('fs');
 
 // Body parsing for handling HTTP POST data
 app.use(express.urlencoded({ extended: true }));
