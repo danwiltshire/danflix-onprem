@@ -1,32 +1,15 @@
-var assert = require('assert');
-var app = require("../src/app.js");
+const Job = require('../src/Job.js');
+const { assert } = require('chai')
 
-describe('Array', function () {
-  describe('#indexOf()', function () {
-    it('should return -1 when the value is not present', function () {
-      assert.equal([1, 2, 3].indexOf(4), -1);
-    });
+const { create } = require('domain');
+var expect = require('chai').expect;
+var should = require('chai').should();
+
+describe("Job test", function() {
+  it("return a number", function() {
+      let job = new Job();
+      let createdJob = job.create();
+      assert.isNumber(createdJob);
+      assert.ok(createdJob >= 0 && createdJob <= 2048);
   });
-});
-
-
-
-describe('hooks', function () {
-  before(function () {
-    // runs once before the first test in this block
-  });
-
-  after(function () {
-    // runs once after the last test in this block
-  });
-
-  beforeEach(function () {
-    // runs before each test in this block
-  });
-
-  afterEach(function () {
-    // runs after each test in this block
-  });
-
-  // test cases
 });

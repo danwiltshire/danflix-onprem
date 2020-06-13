@@ -1,4 +1,4 @@
-# danflix-onprem
+## danflix-onprem
 On-premise component of DanFlix
 
 ## Project documentation
