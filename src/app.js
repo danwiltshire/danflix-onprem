@@ -17,14 +17,7 @@ app.use(morgan('combined'));
  * Media index
  */
 let media = new Map();
-
 media.set(1, { "path": "test/video/sample_video/4K.mp4", title: "A 4K Cityscape" });
-
-if ( media.has( 1 ) ) {
-  console.log("yes");
-} else {
-  console.log("no");
-}
 
 /**
  * The jobId and job progress
@@ -58,7 +51,6 @@ function getRandomInt(max) {
 app.post('/job/run', function(req, res) {
 
   if ( Number.isInteger(req.body.mediaId) ) {
-
     if ( media.has( req.body.mediaId ) ) {
 
       const jobId = getRandomInt(1024);
@@ -68,12 +60,9 @@ app.post('/job/run', function(req, res) {
     } else {
       res.status(404).end();
     }
-
   } else {
     res.status(400).end();
   }
-
-
 
 });
 
@@ -82,10 +71,16 @@ app.post('/job/run', function(req, res) {
  */
 app.get('/job/progress', function(req, res) {
 
-  if ( jobs.has(parseInt(req.query.jobId)) ) {
-    res.end(JSON.stringify({ progress: jobs.get(parseInt(req.query.jobId)) })); // Return progress as JSON
+  if ( Number.isInteger( req.body.jobId ) ) {
+
+    if ( jobs.has( req.query.jobId ) ) {
+      res.end(JSON.stringify({ progress: jobs.get( req.query.jobId ) }));
+    } else {
+      res.status(404).end();
+    }
+
   } else {
-    res.status(404).end();
+    res.status(400).end();
   }
   
 });
