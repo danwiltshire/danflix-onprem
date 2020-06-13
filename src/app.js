@@ -6,7 +6,8 @@ var ffmpeg = require('fluent-ffmpeg');
 /**
  * Body parsing for handling HTTP POST data
  */
-app.use(express.json());
+//app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 /**
  * Use apache 'combined' format logging
@@ -50,18 +51,17 @@ function getRandomInt(max) {
  */
 app.post('/job/run', function(req, res) {
 
-  if ( Number.isInteger(req.body.mediaId) ) {
-    if ( media.has( req.body.mediaId ) ) {
+  // HTTP query parameters are strings by default - cast to int
+  const mediaId = parseInt( req.body.mediaId );
 
-      const jobId = getRandomInt(1024);
-      run(jobId, "test/video/sample_video/4K.mp4", "test/video/output_video/1.mp4");
-      res.end( JSON.stringify({ jobId: jobId }) );
+  if ( media.has( mediaId ) ) {
 
-    } else {
-      res.status(404).end();
-    }
+    const jobId = getRandomInt(1024);
+    run(jobId, "test/video/sample_video/4K.mp4", "test/video/output_video/1.mp4");
+    res.end( JSON.stringify({ jobId: jobId }) );
+    
   } else {
-    res.status(400).end();
+    res.status(404).end();
   }
 
 });
@@ -71,16 +71,13 @@ app.post('/job/run', function(req, res) {
  */
 app.get('/job/progress', function(req, res) {
 
-  if ( Number.isInteger( req.body.jobId ) ) {
+  // HTTP query parameters are strings by default - cast to int
+  const jobId = parseInt( req.query.jobId );
 
-    if ( jobs.has( req.query.jobId ) ) {
-      res.end(JSON.stringify({ progress: jobs.get( req.query.jobId ) }));
-    } else {
-      res.status(404).end();
-    }
-
+  if ( jobs.has( jobId ) ) {
+    res.end(JSON.stringify({ progress: jobs.get( jobId ) }));
   } else {
-    res.status(400).end();
+    res.status(404).end();
   }
   
 });
