@@ -260,15 +260,25 @@
                 }
               ],
               "z": 8,
-              "hasOpenThreats": false,
+              "hasOpenThreats": true,
               "isPublicNetwork": true,
               "isEncrypted": true,
+              "threats": [
+                {
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "title": "No upload integrity check",
+                  "description": "The uploaded media is not validated for integrity so corrupt files will go undetected.",
+                  "mitigation": "Implement file integrity checking via checksums."
+                }
+              ],
               "attrs": {
                 ".marker-target": {
-                  "class": "marker-target hasNoOpenThreats isInScope"
+                  "class": "marker-target hasOpenThreats isInScope"
                 },
                 ".connection": {
-                  "class": "connection hasNoOpenThreats isInScope"
+                  "class": "connection hasOpenThreats isInScope"
                 }
               }
             },
@@ -973,11 +983,54 @@
                   "class": "connection hasNoOpenThreats isInScope"
                 }
               }
+            },
+            {
+              "type": "tm.Flow",
+              "smooth": true,
+              "source": {
+                "id": "f6145412-a509-4b62-a8ba-b48fb129771a"
+              },
+              "target": {
+                "id": "861f8cde-162a-4e29-a205-fae6990fc27c"
+              },
+              "vertices": [
+                {
+                  "x": 213,
+                  "y": 615
+                },
+                {
+                  "x": 476,
+                  "y": 624
+                }
+              ],
+              "id": "03e71b4a-fb29-4374-ad9f-134ddd1f3fd2",
+              "labels": [
+                {
+                  "position": 0.5,
+                  "attrs": {
+                    "text": {
+                      "text": "Spawns",
+                      "font-weight": "400",
+                      "font-size": "small"
+                    }
+                  }
+                }
+              ],
+              "z": 33,
+              "hasOpenThreats": false,
+              "attrs": {
+                ".marker-target": {
+                  "class": "marker-target hasNoOpenThreats isInScope"
+                },
+                ".connection": {
+                  "class": "connection hasNoOpenThreats isInScope"
+                }
+              }
             }
           ]
         },
         "size": {
-          "height": 765.365966796875,
+          "height": 1053.4967041015625,
           "width": 1018.9765625
         }
       }
