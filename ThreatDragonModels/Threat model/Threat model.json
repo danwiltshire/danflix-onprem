@@ -1,0 +1,11 @@
+{
+  "summary": {
+    "title": "Threat model",
+    "owner": "Dan Wiltshire",
+    "description": "Transcodes video and uploads to Amazon S3 on-demand."
+  },
+  "detail": {
+    "contributors": [],
+    "diagrams": []
+  }
+}
