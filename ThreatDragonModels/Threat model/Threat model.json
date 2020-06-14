@@ -524,13 +524,23 @@
                 }
               ],
               "z": 21,
-              "hasOpenThreats": false,
+              "hasOpenThreats": true,
+              "threats": [
+                {
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Denial of service",
+                  "title": "CPU overload",
+                  "description": "There is no limit for how many ffmpeg processes can be spawned.\n\nToo many processes will overload the CPU and potentially cause a denial of service for the application and OS functionality.",
+                  "mitigation": "Implement job queuing."
+                }
+              ],
               "attrs": {
                 ".marker-target": {
-                  "class": "marker-target hasNoOpenThreats isInScope"
+                  "class": "marker-target hasOpenThreats isInScope"
                 },
                 ".connection": {
-                  "class": "connection hasNoOpenThreats isInScope"
+                  "class": "connection hasOpenThreats isInScope"
                 }
               }
             },
