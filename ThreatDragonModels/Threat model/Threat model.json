@@ -472,6 +472,14 @@
                   "title": "Potential incomplete transcodes",
                   "description": "If an ffmpeg job doesn't complete, missing file chunks will be missing from the Transcoded Media Files store.",
                   "mitigation": "Write the files to a temporary directory and only move them once the job has finished successfully."
+                },
+                {
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "If the storage is temporarily unavailable, the application may throw an exception and crash.",
+                  "mitigation": "Handle loss of storage.",
+                  "title": "Loss of storage"
                 }
               ],
               "attrs": {
@@ -752,6 +760,14 @@
                   "title": "Input sanitisation",
                   "description": "Certain file names may cause the application to crash due to lack of file name sanitisation.",
                   "mitigation": "Sanitise input."
+                },
+                {
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "title": "Loss of storage",
+                  "description": "If the storage is temporarily unavailable, the application may throw an exception and crash.",
+                  "mitigation": "Handle loss of storage."
                 }
               ],
               "attrs": {
@@ -792,13 +808,23 @@
                 }
               ],
               "z": 27,
-              "hasOpenThreats": false,
+              "hasOpenThreats": true,
+              "threats": [
+                {
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "title": "Loss of storage",
+                  "description": "If the storage is temporarily unavailable, the application may throw an exception and crash.",
+                  "mitigation": "Handle loss of storage."
+                }
+              ],
               "attrs": {
                 ".marker-target": {
-                  "class": "marker-target hasNoOpenThreats isInScope"
+                  "class": "marker-target hasOpenThreats isInScope"
                 },
                 ".connection": {
-                  "class": "connection hasNoOpenThreats isInScope"
+                  "class": "connection hasOpenThreats isInScope"
                 }
               }
             },
@@ -869,6 +895,14 @@
                   "title": "Potential access beyond required files",
                   "description": "The identity used to run the application has access beyond what is required which may result in sensitive information being disclosed.",
                   "mitigation": "Limit access.  Chroot.\n\nHave a separate identify for file system actions."
+                },
+                {
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "title": "Loss of storage",
+                  "description": "If the storage is temporarily unavailable, the application may throw an exception and crash.",
+                  "mitigation": "Handle storage loss."
                 }
               ],
               "attrs": {
