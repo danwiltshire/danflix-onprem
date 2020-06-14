@@ -169,6 +169,14 @@
                   "title": "Overload of requests",
                   "description": "No rate limiting exists.  The on-prem resource will be deployed in a bandwidth-limited environment.",
                   "mitigation": "Implement rate limiting - possibly via an external resource such as Cloudflare."
+                },
+                {
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "title": "Request integrity violation",
+                  "description": "HTTP is currently sent unencrypted, leaving requests open to potential manipulation.",
+                  "mitigation": "Implement encryption.  Is there a LetsEncrypt node module?"
                 }
               ],
               "attrs": {
