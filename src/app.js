@@ -15,7 +15,8 @@ let media = new Map();
 media.set(1, { "path": "test/video/sample_video/4K/1.mp4", title: "A 4K Cityscape" });
 
 /**
- * Returns a random positive number
+ * When a job is started, progress will be reported as a number out of 100.
+ * The function will round up for less data storage and less processing required on the front-end
  * @param {Number} max - Random number will not be higher than this value
  */
 function getRandomInt(max) {
