@@ -464,6 +464,14 @@
                   "title": "Space Usage",
                   "description": "There is no check for file system usage.  If the file system is filled up, this may cause a denial of service for the application and OS.",
                   "mitigation": "Implement a space usage check."
+                },
+                {
+                  "status": "Open",
+                  "severity": "Low",
+                  "type": "Denial of service",
+                  "title": "Potential incomplete transcodes",
+                  "description": "If an ffmpeg job doesn't complete, missing file chunks will be missing from the Transcoded Media Files store.",
+                  "mitigation": "Write the files to a temporary directory and only move them once the job has finished successfully."
                 }
               ],
               "attrs": {
