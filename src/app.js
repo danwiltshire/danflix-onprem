@@ -82,6 +82,14 @@ app.get('/job/progress', function(req, res) {
   }
 });
 
+// Get status of a transcode job for the specified :jobId
+app.get('/jobs', function(req, res) {
+
+  // Return all jobs as JSON
+  res.end( JSON.stringify(Array.from(jobs.entries())) );
+
+});
+
 // Start the HTTP server
 app.listen(8080, function() {
   console.log('Transcode app listening on port 8080!');
