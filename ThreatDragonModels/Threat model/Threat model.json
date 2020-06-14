@@ -789,16 +789,26 @@
               "angle": 0,
               "id": "ef67ee0a-54b6-4302-897a-d31ce662e393",
               "z": 30,
-              "hasOpenThreats": false,
+              "hasOpenThreats": true,
+              "threats": [
+                {
+                  "status": "Open",
+                  "severity": "Low",
+                  "type": "Spoofing",
+                  "description": "jobIDs are generated randomly between 0-2048 but there is no mechanism to detect a duplicate.\n\nCould result in wrong job progress being reported.",
+                  "mitigation": "Use a rolling jobID.",
+                  "title": "Duplicate jobID"
+                }
+              ],
               "attrs": {
                 ".element-shape": {
-                  "class": "element-shape hasNoOpenThreats isInScope"
+                  "class": "element-shape hasOpenThreats isInScope"
                 },
                 "text": {
                   "text": "Job Status"
                 },
                 ".element-text": {
-                  "class": "element-text hasNoOpenThreats isInScope"
+                  "class": "element-text hasOpenThreats isInScope"
                 }
               }
             },
