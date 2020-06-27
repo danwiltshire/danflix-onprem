@@ -26,6 +26,13 @@ function getRandomInt(max) {
 // The jobId and job progress
 let jobs = new Map();
 
+/**
+ * Runs an FFmpeg transcode job using the fluent-ffmpeg wrapper
+ * Returns a Promise that can be handled appropriately.
+ * @param {Number} jobId - The Job ID
+ * @param {String} input - The source for FFmpeg
+ * @param {String} output - The output for FFmpeg
+ */
 function run(jobId, input, output) {
 
   console.log("Job " + jobId + ": Starting...");
