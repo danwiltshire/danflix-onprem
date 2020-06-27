@@ -28,103 +28,118 @@
         <article>
             <pre class="prettyprint source linenums"><code>const express = require('express');
 const app = express();
-var ffmpeg = require('fluent-ffmpeg');
+const morgan = require('morgan')
+const ffmpeg = require('fluent-ffmpeg');
+const fs = require('fs');
+
+// Body parsing for handling HTTP POST data
+app.use(express.urlencoded({ extended: true }));
+
+// Use apache 'combined' format logging
+app.use(morgan('combined'));
+
+// Media index - will be replaced by database
+let media = new Map();
+media.set(1, { "path": "test/video/sample_video/4K/1.mp4", title: "A 4K Cityscape" });
 
 /**
- * A Job class for managing transcode processes
+ * When a job is started, progress will be reported as a number out of 100.
+ * The function will round up for less data storage and less processing required on the front-end
+ * @param {Number} max - Random number will not be higher than this value
  */
-class Job {
-
-  /**
-   * Returns a random number for use as a Job ID
-   */
-  create() {
-    console.log("Job create()");
-    return(Math.floor(Math.random() * Math.floor(2048)));
-  }
-
-  /**
-   * Starts the ffmpeg process
-   * @param {Number} id - The Job ID
-   */
-  start(id) {
-    console.log("Job start()");
-  }
-
-  /**
-   * Gets the Job progress
-   * @param {Number} id - The Job ID
-   */
-  get(id) {
-    console.log("Job get()");
-  }
-
-  /**
-   * Cancels the Job
-   * @param {Number} id - The Job ID 
-   */
-  cancel(id) {
-    console.log("Job cancel()");
-  }
-  
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
 }
 
-const job = new Job();
+// The jobId and job progress
+let jobs = new Map();
 
-console.log(job.create());
-job.start();
-job.get();
-job.cancel();
+/**
+ * Runs an FFmpeg transcode job using the fluent-ffmpeg wrapper
+ * Returns a Promise that can be handled appropriately.
+ * @param {Number} jobId - The Job ID
+ * @param {String} input - The source for FFmpeg
+ * @param {String} output - The output for FFmpeg
+ */
+function run(jobId, input, output) {
 
-//function createJob() {}
+  console.log("Job " + jobId + ": Starting...");
+  console.log("Job " + jobId + ": Input: " + input)
+  console.log("Job " + jobId + ": Output: " + output)
 
-function startJob(jobId, inputPath, outputPath) {
-  console.log("Running transcode job " + jobId)
   return new Promise(async (resolve, reject) => {
     return ffmpeg()
-      .input(inputPath)
-      .noAudio()
-      .output(outputPath)
-      .on('progress', function(progress) { jobs.set(jobId,progress.percent) })
-        // todo.. delete dict entry when job errors/completes
+      .input(input)
+      .outputOptions(['-f hls', '-start_number 0', '-hls_time 10', '-hls_list_size 0'])
+      .output(output)
+      .on('progress', function(progress) { jobs.set( jobId, Math.ceil(progress.percent) ) })
       .on('end', resolve)
       .on('error', reject)
       .run();
   })
 }
 
-function cancelJob(Job) {}
+// Spawn a transcode job for the specified :mediaId
+app.post('/job/run', function(req, res) {
 
-function getJob(Job) {}
+  // HTTP query parameters are strings by default - cast to int
+  const mediaId = parseInt( req.body.mediaId );
 
-// Returns a random integer
-function getRandomInt(max) {
-  return Math.floor(Math.random() * Math.floor(max));
-}
+  if ( media.has( mediaId ) ) {
+    const mediaItem = media.get( mediaId );
+    const jobId = getRandomInt(1024);
+    const input = mediaItem.path;
+    const outputDir = "test/video/output_video/" + mediaId;
+    const output = outputDir + "/" + mediaId + ".m3u8";
 
-// Temporary jobId and progress info
-let jobs = new Map();
+    // Create output directory for ffmpeg
+    if (!fs.existsSync(outputDir)){
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
 
-// Post a transcode job for specified :mediaId
-app.post('/job/transcode', function(req, res) {
-  console.log('Received POST for /job/transcode');
-  console.log('parameter: ' + req.query.mediaId);
-  const jobId = getRandomInt(1024); // Generate random number for the jobId (can be improved)
-  startJob(jobId, "tests/video/sample_video/4K.mp4", "tests/video/output_video/1.mp4"); // Run the transcode
-  res.end(JSON.stringify({ jobId: jobId })); // Return jobId as JSON
+    let job = run(jobId, input, output);
+
+    /**
+     * Run the transcode job and handle the response
+     */
+    job.then(function() {
+      console.log("Job " + jobId + ": Finished.");
+    }, function() {
+      console.log("Job " + jobId + ": Failed!");
+    });
+
+    res.end( JSON.stringify({ jobId: jobId }) );
+  } else {
+    res.status(404).end();
+  }
 });
 
-// Get status of a transcode job
-app.get('/job/transcode', function(req, res) {
-  console.log('Received GET for /job/transcode');
-  console.log('parameter: ' + parseInt(req.query.jobId));
-  res.end(JSON.stringify({ progress: jobs.get(parseInt(req.query.jobId)) })); // Return progress as JSON
+// Get status of a transcode job for the specified :jobId
+app.get('/job/progress', function(req, res) {
+
+  // HTTP query parameters are strings by default - cast to int
+  const jobId = parseInt( req.query.jobId );
+
+  // Return the progress in JSON (progress:X)
+  if ( jobs.has( jobId ) ) {
+    res.end(JSON.stringify({ progress: jobs.get( jobId ) }));
+  } else {
+    res.status(404).end();
+  }
 });
 
+// Get status of a transcode job for the specified :jobId
+app.get('/jobs', function(req, res) {
+
+  // Return all jobs as JSON
+  res.end( JSON.stringify(Array.from(jobs.entries())) );
+
+});
+
+// Start the HTTP server
 app.listen(8080, function() {
-  console.log('Example app listening on port 8080!');
-});
-</code></pre>
+  console.log('Transcode app listening on port 8080!');
+});</code></pre>
         </article>
     </section>
 
@@ -134,13 +149,13 @@ app.listen(8080, function() {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Job.html">Job</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#getRandomInt">getRandomInt</a></li><li><a href="global.html#run">run</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Fri Jun 12 2020 09:01:00 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sat Jun 27 2020 19:33:08 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>
