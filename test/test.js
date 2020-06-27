@@ -1,15 +1,15 @@
-const Job = require('../src/Job.js');
-const { assert } = require('chai')
+const { assert } = require('chai');
+require('../src/app.js')
 
-const { create } = require('domain');
-var expect = require('chai').expect;
-var should = require('chai').should();
+describe("Basic Number Tests", function() {
+  it("should be equal to 2", function() {
+    assert.equal( (1 + 1), 2);
+  });
+});
 
-describe("Job test", function() {
-  it("return a number", function() {
-      let job = new Job();
-      let createdJob = job.create();
-      assert.isNumber(createdJob);
-      assert.ok(createdJob >= 0 && createdJob <= 2048);
+describe("app.js function tests", function() {
+  it("getRandomInt should return a random number between 0-2048", function() {
+    const randomInt = getRandomInt(2048);
+    assert.ok( randomInt >= 0 && randomInt <= 2048 );
   });
 });

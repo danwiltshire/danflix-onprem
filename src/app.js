@@ -62,7 +62,17 @@ app.post('/job/run', function(req, res) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
 
-    run(jobId, input, output);
+    let job = run(jobId, input, output);
+
+    /**
+     * Run the transcode job and handle the response
+     */
+    job.then(function() {
+      console.log("Job " + jobId + ": Finished.");
+    }, function() {
+      console.log("Job " + jobId + ": Failed!");
+    });
+
     res.end( JSON.stringify({ jobId: jobId }) );
   } else {
     res.status(404).end();
