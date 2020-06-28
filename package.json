@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/danwiltshire/danflix-onprem#readme",
   "dependencies": {
+    "aws-sdk": "2.706.0",
     "express": "4.17.1",
     "fluent-ffmpeg": "2.1.2",
     "morgan": "1.10.0"
