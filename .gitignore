@@ -119,7 +119,7 @@ dist
 .DS_Store
 
 # Test video
-test/video
+test/video/output_video/*
 
 # Scratch
 scratch
