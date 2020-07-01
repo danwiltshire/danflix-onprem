@@ -96,7 +96,7 @@ function transcode(jobId, input, output) {
       .output(output)
       .on('progress', function(progress) { jobs.set( jobId, Math.ceil(progress.percent) ) })
       .on('end', resolve())
-      .on('error', (err) => reject(err))
+      .on('error', reject())
       .run();
   })
 }
