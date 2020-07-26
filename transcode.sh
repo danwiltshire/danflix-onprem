@@ -36,7 +36,7 @@ for v in $inputfolder/**/*.{avi,mkv,mp4}; do
     # Transcode media
     if [ "$dryrun" = false ]; then
       echo "transcode $v"
-      ffmpeg -i "$v" -f hls -start_number 0 -hls_time 10 -hls_list_size 0 "$destwithoutextension/index.m3u8"
+      ffmpeg -i "$v" -vf "scale=w=1280:h=720:force_original_aspect_ratio=decrease" -f hls -start_number 0 -hls_time 10 -hls_list_size 0 "$destwithoutextension/index.m3u8"
     else
       echo "Would transcode $v -> $destwithoutextension/index.m3u8"
     fi
