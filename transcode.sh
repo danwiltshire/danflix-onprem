@@ -15,29 +15,30 @@ for v in $inputfolder/**/*.{avi,mkv,mp4}; do
     # Substitute variables to get the identical output folder
     o=${v/$inputfolder/$outputfolder}
     withoutextension="${v%.*}"
+    destwithoutextension="${o%.*}"
 
     # Create directories
     if [ "$dryrun" = false ]; then
-      echo "mkdir $o"
-      mkdir -p "$o"
+      echo "mkdir $destwithoutextension"
+      mkdir -p "$destwithoutextension"
     else
-      echo "Would mkdir -p $o"
+      echo "Would mkdir -p $destwithoutextension"
     fi
 
     # Find and copy .nfo
     if [ -f "$withoutextension.nfo" ] && [ "$dryrun" = false ]; then
       echo "cp $withoutextension.nfo"
-      cp "$withoutextension.nfo" "$o/"
+      cp "$withoutextension.nfo" "$destwithoutextension/"
     else
-      echo "Would cp $withoutextension.nfo -> $o/"
+      echo "Would cp $withoutextension.nfo -> $destwithoutextension/"
     fi
 
     # Transcode media
     if [ "$dryrun" = false ]; then
       echo "transcode $v"
-      ffmpeg -i "$v" -f hls -start_number 0 -hls_time 10 -hls_list_size 0 "$o/index.m3u8"
+      ffmpeg -i "$v" -f hls -start_number 0 -hls_time 10 -hls_list_size 0 "$destwithoutextension/index.m3u8"
     else
-      echo "Would transcode $v"
+      echo "Would transcode $v -> $destwithoutextension/index.m3u8"
     fi
   fi
 done
