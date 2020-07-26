@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/danwiltshire/danflix-onprem/api"
-	"github.com/danwiltshire/danflix-onprem/services/thetvdb"
 )
 
 func main() {
@@ -11,6 +10,6 @@ func main() {
 	//m.GetAll()
 	//server.Start()
 	//library.Run()
-	thetvdb.Get()
+	//thetvdb.Get()
 	api.Start()
 }
