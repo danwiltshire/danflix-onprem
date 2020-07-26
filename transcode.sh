@@ -14,6 +14,7 @@ for v in $inputfolder/**/*.{avi,mkv,mp4}; do
   if [ -f "$v" ]; then
     # Substitute variables to get the identical output folder
     o=${v/$inputfolder/$outputfolder}
+    withoutextension="${v%.*}"
 
     # Create directories
     if [ "$dryrun" = false ]; then
@@ -21,6 +22,14 @@ for v in $inputfolder/**/*.{avi,mkv,mp4}; do
       mkdir -p "$o"
     else
       echo "Would mkdir -p $o"
+    fi
+
+    # Find and copy .nfo
+    if [ -f "$withoutextension.nfo" ] && [ "$dryrun" = false ]; then
+      echo "cp $withoutextension.nfo"
+      cp "$withoutextension.nfo" "$o/"
+    else
+      echo "Would cp $withoutextension.nfo -> $o/"
     fi
 
     # Transcode media
