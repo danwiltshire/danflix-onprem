@@ -3,6 +3,8 @@ package library
 import (
 	"fmt"
 	"net/http"
+	"os"
+	"path/filepath"
 )
 
 type movie struct {
@@ -19,6 +21,28 @@ type episode struct {
 	episode int
 	season  int
 	md5     string
+}
+
+func WalkMatch(root, pattern string) ([]string, error) {
+	var matches []string
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if info.IsDir() {
+			return nil
+		}
+		if matched, err := filepath.Match(pattern, filepath.Base(path)); err != nil {
+			return err
+		} else if matched {
+			matches = append(matches, path)
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return matches, nil
 }
 
 func GetLibrary(w http.ResponseWriter, req *http.Request) {
