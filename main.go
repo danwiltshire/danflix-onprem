@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"path/filepath"
 
@@ -27,13 +28,13 @@ func main() {
 		fmt.Println("Failed")
 	}
 
-	type episode struct {
-		m3u8    string
-		nfo     string
-		nfoData nfo.TVEpisode
+	type Episode struct {
+		M3u8    string
+		Nfo     string
+		NfoData nfo.TVEpisode
 	}
 
-	var availableMedia []episode
+	var availableMedia []Episode
 
 	for index1, item1 := range mediaItem {
 		//fmt.Println(filepath.Dir(s))
@@ -46,20 +47,18 @@ func main() {
 				if err4 != nil {
 					fmt.Println("failed to get NFO data (from main)")
 				} else {
-					availableMedia = append(availableMedia, episode{m3u8: item1, nfo: item2, nfoData: *nfoData})
+					availableMedia = append(availableMedia, Episode{M3u8: item1, Nfo: item2, NfoData: *nfoData})
 				}
 			}
 		}
 	}
 
-	for _, item3 := range availableMedia {
-		fmt.Println("Found M3U3: ", item3.m3u8)
-		fmt.Println("Found NFO: ", item3.nfo)
-		fmt.Println("Found nfoData Show Title: ", item3.nfoData.ShowTitle)
-		fmt.Println("Found nfoData Title: ", item3.nfoData.Title)
-		fmt.Println("Found nfoData Episode: ", item3.nfoData.Episode)
-		fmt.Println("Found nfoData Season: ", item3.nfoData.Season)
+	e, err := json.Marshal(availableMedia)
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
+	fmt.Println(string(e))
 
 	//library.WalkMatch("./media/converted", "*.m3u8")
 
