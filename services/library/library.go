@@ -7,7 +7,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/danwiltshire/danflix-onprem/services/library"
 	"github.com/danwiltshire/danflix-onprem/services/nfo"
 )
 
@@ -43,12 +42,12 @@ func GetLibrary(w http.ResponseWriter, req *http.Request) {
 
 	fmt.Println("GetLibrary()")
 
-	mediaItem, err := library.WalkMatch("./media/converted", "*.m3u8")
+	mediaItem, err := WalkMatch("./media/converted", "*.m3u8")
 	if err != nil {
 		fmt.Println("Failed")
 	}
 
-	mediaItem2, err2 := library.WalkMatch("./media/converted", "*.nfo")
+	mediaItem2, err2 := WalkMatch("./media/converted", "*.nfo")
 	if err2 != nil {
 		fmt.Println("Failed")
 	}
@@ -84,7 +83,7 @@ func GetLibrary(w http.ResponseWriter, req *http.Request) {
 	switch req.Method {
 	case "GET":
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"message": "GET method requested"}`))
+		w.Write(e)
 	default:
 		w.WriteHeader(http.StatusNotFound)
 		w.Write([]byte(`{"message": "Can't find method requested"}`))
