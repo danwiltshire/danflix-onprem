@@ -1,10 +1,12 @@
 package main
 
 import (
-	"encoding/xml"
 	"fmt"
+	"path/filepath"
 
 	"github.com/danwiltshire/danflix-onprem/api"
+	"github.com/danwiltshire/danflix-onprem/services/library"
+	"github.com/danwiltshire/danflix-onprem/services/nfo"
 )
 
 func main() {
@@ -15,52 +17,51 @@ func main() {
 	//library.Run()
 	//thetvdb.Get()
 
-	type Email struct {
-		Where string `xml:"where,attr"`
-		Addr  string
-	}
-	type Address struct {
-		City, State string
-	}
-	type Result struct {
-		XMLName xml.Name `xml:"Person"`
-		Name    string   `xml:"FullName"`
-		Phone   string
-		Email   []Email
-		Groups  []string `xml:"Group>Value"`
-		Address
-	}
-	v := Result{Name: "none", Phone: "none"}
-
-	data := `
-		<Person>
-			<FullName>Grace R. Emlin</FullName>
-			<Company>Example Inc.</Company>
-			<Email where="home">
-				<Addr>gre@example.com</Addr>
-			</Email>
-			<Email where='work'>
-				<Addr>gre@work.com</Addr>
-			</Email>
-			<Group>
-				<Value>Friends</Value>
-				<Value>Squash</Value>
-			</Group>
-			<City>Hanga Roa</City>
-			<State>Easter Island</State>
-		</Person>
-	`
-	err := xml.Unmarshal([]byte(data), &v)
+	mediaItem, err := library.WalkMatch("./media/converted", "*.m3u8")
 	if err != nil {
-		fmt.Printf("error: %v", err)
-		return
+		fmt.Println("Failed")
 	}
-	fmt.Printf("XMLName: %#v\n", v.XMLName)
-	fmt.Printf("Name: %q\n", v.Name)
-	fmt.Printf("Phone: %q\n", v.Phone)
-	fmt.Printf("Email: %v\n", v.Email)
-	fmt.Printf("Groups: %v\n", v.Groups)
-	fmt.Printf("Address: %v\n", v.Address)
+
+	mediaItem2, err2 := library.WalkMatch("./media/converted", "*.nfo")
+	if err2 != nil {
+		fmt.Println("Failed")
+	}
+
+	type episode struct {
+		m3u8    string
+		nfo     string
+		nfoData nfo.TVEpisode
+	}
+
+	var availableMedia []episode
+
+	for index1, item1 := range mediaItem {
+		//fmt.Println(filepath.Dir(s))
+		fmt.Println("Found: ", index1, item1)
+		for index2, item2 := range mediaItem2 {
+			fmt.Println("Found: ", index2, item2)
+			if filepath.Dir(item1) == filepath.Dir(item2) {
+				//fmt.Println("found match")
+				var nfoData, err4 = nfo.GetMetadata(item2)
+				if err4 != nil {
+					fmt.Println("failed to get NFO data (from main)")
+				} else {
+					availableMedia = append(availableMedia, episode{m3u8: item1, nfo: item2, nfoData: *nfoData})
+				}
+			}
+		}
+	}
+
+	for index3, item3 := range availableMedia {
+		fmt.Println("Found M3U3: ", index3, item3.m3u8)
+		fmt.Println("Found NFO: ", index3, item3.nfo)
+		fmt.Println("Found nfoData Show Title: ", item3.nfoData.ShowTitle)
+		fmt.Println("Found nfoData Title: ", item3.nfoData.Title)
+		fmt.Println("Found nfoData Episode: ", item3.nfoData.Episode)
+		fmt.Println("Found nfoData Season: ", item3.nfoData.Season)
+	}
+
+	//library.WalkMatch("./media/converted", "*.m3u8")
 
 	api.Start()
 }
