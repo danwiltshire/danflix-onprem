@@ -52,9 +52,9 @@ func main() {
 		}
 	}
 
-	for index3, item3 := range availableMedia {
-		fmt.Println("Found M3U3: ", index3, item3.m3u8)
-		fmt.Println("Found NFO: ", index3, item3.nfo)
+	for _, item3 := range availableMedia {
+		fmt.Println("Found M3U3: ", item3.m3u8)
+		fmt.Println("Found NFO: ", item3.nfo)
 		fmt.Println("Found nfoData Show Title: ", item3.nfoData.ShowTitle)
 		fmt.Println("Found nfoData Title: ", item3.nfoData.Title)
 		fmt.Println("Found nfoData Episode: ", item3.nfoData.Episode)
